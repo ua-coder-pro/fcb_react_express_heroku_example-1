@@ -46,11 +46,11 @@ class App extends React.Component {
 }
 
 loadPeople = () => {
-axios.get('/api').then(
-  (response) => {
-    console.log(response.people)
-  }
-)
+  axios.get('/api').then(
+    (response) => {
+      console.log('response.userAndCpuInfo', response.data.userAndCpuInfo)
+    }
+  )
 }
 
 render = () => {

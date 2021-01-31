@@ -1,13 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser')
+const os = require('os');
 const path = require('path');
 const app = express();
 const helmet = require('helmet') // creates headers that protect from attacks (security)
 const cors = require('cors')  // allows/disallows cross-site communication
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// --> Add this
+function getUserAndCpuInfo () {
+  const cpus = os.cpus();
+  const userInfo = os.userInfo()
+  return {
+    cpus,
+    userInfo,
+  }
+}
+
 // ** MIDDLEWARE ** //
 const whitelist = ['http://localhost:3000', 'http://localhost:8080', 'https://shrouded-journey-38552.herokuapp.com']
 const corsOptions = {
@@ -27,8 +36,11 @@ app.use(helmet())
 app.use(cors(corsOptions))
 
 app.get('/api/', (req, res) => {
-  res.send({ people: 'You want to see people I assume' });
+  const userAndCpuInfo = getUserAndCpuInfo()
+  console.log('userAndCpuInfo', userAndCpuInfo)
+  res.send({ userAndCpuInfo });
 });
+
 app.post('/api/', (req, res) => {
   res.send(
     `Person created: ${req.body.person.name}`,
